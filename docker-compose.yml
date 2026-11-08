@@ -1,0 +1,42 @@
+# Lokalno razvojno okruženje: MySQL baza + Mailpit (test mejlovi)
+# Pokretanje: docker compose up -d
+# Reset baze (ponovo izvršava database/*.sql): docker compose down -v && docker compose up -d
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: study_planner_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: study_planner
+      MYSQL_USER: planner
+      MYSQL_PASSWORD: planner
+      TZ: UTC
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --default-time-zone=+00:00
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      # SQL fajlovi se izvršavaju po abecedi, samo kad je volume prazan
+      - ./database:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      # preko TCP-a: privremeni server tokom izvršavanja SQL fajlova ne sluša na portu
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: study_planner_mailpit
+    restart: unless-stopped
+    ports:
+      - "8025:8025"   # web interfejs: http://localhost:8025
+      - "1025:1025"   # SMTP za aplikaciju
+
+volumes:
+  db_data:
