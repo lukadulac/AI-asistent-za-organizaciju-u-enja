@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    // Where code lives and where compiled JS goes
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    // Modern Node with ES modules ("type": "module" in package.json)
+    "module": "nodenext",
+    "target": "esnext",
+    "lib": ["esnext"],
+    "types": ["node"],
+
+    // Maps errors in dist/*.js back to the right line in src/*.ts
+    "sourceMap": true,
+
+    // Type checking
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noFallthroughCasesInSwitch": true,
+
+    // Module rules
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true
+  },
+  "include": ["src"]
+}
