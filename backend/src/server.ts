@@ -1,5 +1,6 @@
-import {app} from "./app.js";
+import { app } from "./app.js";
+import { env } from "./config/env.js";
 
-app.listen(3000, () => {
-	console.log("API is running on port 3000");
+app.listen(env.PORT, () => {
+	console.log(`API is running on port ${env.PORT}`);
 });
